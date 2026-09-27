@@ -1,0 +1,27 @@
+{
+  "companyName": "InteriorCraft Studio",
+  "companyTagline": "Crafting Beautiful Living Spaces",
+  "companyAddress": "42, Design District, Bandra West, Mumbai - 400050",
+  "companyPhone": "+91 98765 43210",
+  "companyEmail": "hello@interiorcraftstudio.in",
+  "companyWebsite": "www.interiorcraftstudio.in",
+  "companyGST": "27AABCI1234D1ZX",
+  "currencySymbol": "₹",
+  "currencyCode": "INR",
+  "gstPercent": 18,
+  "defaultDiscountPercent": 0,
+  "installationCharge": 0,
+  "transportCharge": 0,
+  "termsAndConditions": [
+    "50% advance payment required to commence work. Balance 40% on material delivery and 10% on completion.",
+    "Quoted prices are valid for 30 days from the date of quotation.",
+    "Any variation in dimensions or specifications after work order issuance will attract additional charges.",
+    "Civil / plumbing / electrical work is not included unless specifically mentioned in the quotation.",
+    "Delivery and installation timeline will be confirmed at the time of order placement.",
+    "All materials supplied by the company carry manufacturer warranty. Labour warranty is 1 year from completion.",
+    "GST at applicable rates is included in the above amounts.",
+    "Disputes, if any, shall be subject to Mumbai jurisdiction."
+  ],
+  "quotationValidityDays": 30,
+  "watermarkText": "QUOTATION"
+}

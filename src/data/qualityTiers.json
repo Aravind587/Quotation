@@ -1,0 +1,71 @@
+[
+  { "id": "kitchen-lshape-eco",     "productId": "kitchen-lshape",    "tierName": "Economy",  "ratePerUnit": 850,  "materialSpec": "18mm HDF board, standard laminate finish, SS 304 hinges & channels" },
+  { "id": "kitchen-lshape-std",     "productId": "kitchen-lshape",    "tierName": "Standard", "ratePerUnit": 1200, "materialSpec": "18mm MDF board, imported laminate, soft-close channels, stone countertop" },
+  { "id": "kitchen-lshape-prem",    "productId": "kitchen-lshape",    "tierName": "Premium",  "ratePerUnit": 1750, "materialSpec": "18mm BWP ply, acrylic/PU finish, Hettich soft-close, quartz countertop" },
+  { "id": "kitchen-lshape-lux",     "productId": "kitchen-lshape",    "tierName": "Luxury",   "ratePerUnit": 2400, "materialSpec": "Marine ply + lacquered glass, Blum hardware, Corian/marble countertop, Grohe fittings" },
+
+  { "id": "kitchen-straight-eco",   "productId": "kitchen-straight",  "tierName": "Economy",  "ratePerUnit": 5500,  "materialSpec": "HDF board, standard laminate, SS 304 hinges" },
+  { "id": "kitchen-straight-std",   "productId": "kitchen-straight",  "tierName": "Standard", "ratePerUnit": 8000,  "materialSpec": "MDF board, imported laminate, soft-close channels" },
+  { "id": "kitchen-straight-prem",  "productId": "kitchen-straight",  "tierName": "Premium",  "ratePerUnit": 11500, "materialSpec": "BWP ply, acrylic finish, Hettich fittings, stone countertop" },
+  { "id": "kitchen-straight-lux",   "productId": "kitchen-straight",  "tierName": "Luxury",   "ratePerUnit": 16000, "materialSpec": "Marine ply, lacquered glass, Blum hardware, Corian countertop" },
+
+  { "id": "kitchen-island-eco",     "productId": "kitchen-island",    "tierName": "Economy",  "ratePerUnit": 900,  "materialSpec": "HDF board, standard laminate, SS 304 hardware" },
+  { "id": "kitchen-island-std",     "productId": "kitchen-island",    "tierName": "Standard", "ratePerUnit": 1300, "materialSpec": "MDF board, imported laminate, soft-close hardware" },
+  { "id": "kitchen-island-prem",    "productId": "kitchen-island",    "tierName": "Premium",  "ratePerUnit": 1850, "materialSpec": "BWP ply, acrylic/glass finish, Hettich hardware, quartz countertop" },
+  { "id": "kitchen-island-lux",     "productId": "kitchen-island",    "tierName": "Luxury",   "ratePerUnit": 2600, "materialSpec": "Marine ply, lacquered glass, Blum hardware, Corian/marble countertop" },
+
+  { "id": "wardrobe-sliding-eco",   "productId": "wardrobe-sliding",  "tierName": "Economy",  "ratePerUnit": 750,  "materialSpec": "18mm HDF board, laminate finish, standard channels & handles" },
+  { "id": "wardrobe-sliding-std",   "productId": "wardrobe-sliding",  "tierName": "Standard", "ratePerUnit": 1050, "materialSpec": "18mm MDF board, imported laminate, branded sliding channels" },
+  { "id": "wardrobe-sliding-prem",  "productId": "wardrobe-sliding",  "tierName": "Premium",  "ratePerUnit": 1450, "materialSpec": "18mm BWP ply, acrylic finish, Hettich soft-close sliding system, mirror panel" },
+  { "id": "wardrobe-sliding-lux",   "productId": "wardrobe-sliding",  "tierName": "Luxury",   "ratePerUnit": 2100, "materialSpec": "Marine ply, lacquered glass/profile doors, Hafele/Blum hardware, LED interior lighting" },
+
+  { "id": "wardrobe-hinged-eco",    "productId": "wardrobe-hinged",   "tierName": "Economy",  "ratePerUnit": 650,  "materialSpec": "HDF board, laminate, standard SS hinges" },
+  { "id": "wardrobe-hinged-std",    "productId": "wardrobe-hinged",   "tierName": "Standard", "ratePerUnit": 950,  "materialSpec": "MDF board, imported laminate, soft-close hinges" },
+  { "id": "wardrobe-hinged-prem",   "productId": "wardrobe-hinged",   "tierName": "Premium",  "ratePerUnit": 1300, "materialSpec": "BWP ply, acrylic finish, Hettich soft-close hinges & drawer channels" },
+  { "id": "wardrobe-hinged-lux",    "productId": "wardrobe-hinged",   "tierName": "Luxury",   "ratePerUnit": 1900, "materialSpec": "Marine ply, lacquered/glass panels, Blum hardware, interior LED lighting" },
+
+  { "id": "wardrobe-walkin-eco",    "productId": "wardrobe-walkin",   "tierName": "Economy",  "ratePerUnit": 600,  "materialSpec": "HDF board, laminate shelving, standard hardware" },
+  { "id": "wardrobe-walkin-std",    "productId": "wardrobe-walkin",   "tierName": "Standard", "ratePerUnit": 900,  "materialSpec": "MDF board, imported laminate, soft-close hardware" },
+  { "id": "wardrobe-walkin-prem",   "productId": "wardrobe-walkin",   "tierName": "Premium",  "ratePerUnit": 1250, "materialSpec": "BWP ply, acrylic/PU finish, Hettich hardware, island unit, full-length mirror" },
+  { "id": "wardrobe-walkin-lux",    "productId": "wardrobe-walkin",   "tierName": "Luxury",   "ratePerUnit": 1800, "materialSpec": "Marine ply, lacquered glass, Hafele hardware, quartz island, LED mood lighting" },
+
+  { "id": "tv-unit-eco",            "productId": "tv-unit",           "tierName": "Economy",  "ratePerUnit": 550,  "materialSpec": "HDF board, laminate finish, standard hardware, basic design" },
+  { "id": "tv-unit-std",            "productId": "tv-unit",           "tierName": "Standard", "ratePerUnit": 800,  "materialSpec": "MDF board, imported laminate + fluted panels, LED cove" },
+  { "id": "tv-unit-prem",           "productId": "tv-unit",           "tierName": "Premium",  "ratePerUnit": 1150, "materialSpec": "BWP ply, acrylic + glass back panels, integrated LED strips, soft-close" },
+  { "id": "tv-unit-lux",            "productId": "tv-unit",           "tierName": "Luxury",   "ratePerUnit": 1600, "materialSpec": "Marine ply, lacquered glass + stone, Blum hardware, full LED integration" },
+
+  { "id": "false-ceiling-eco",      "productId": "false-ceiling",     "tierName": "Economy",  "ratePerUnit": 55,   "materialSpec": "POP false ceiling, basic border design, no cove" },
+  { "id": "false-ceiling-std",      "productId": "false-ceiling",     "tierName": "Standard", "ratePerUnit": 85,   "materialSpec": "Gypsum board false ceiling with cove, basic LED strip" },
+  { "id": "false-ceiling-prem",     "productId": "false-ceiling",     "tierName": "Premium",  "ratePerUnit": 120,  "materialSpec": "Gypsum board, double-step cove with RGB LED, spot provision" },
+  { "id": "false-ceiling-lux",      "productId": "false-ceiling",     "tierName": "Luxury",   "ratePerUnit": 175,  "materialSpec": "Acoustic gypsum / metal ceiling, integrated smart LED, feature focal point" },
+
+  { "id": "feature-wall-eco",       "productId": "feature-wall",      "tierName": "Economy",  "ratePerUnit": 120,  "materialSpec": "Textured wallpaper or basic wood-look wall panel" },
+  { "id": "feature-wall-std",       "productId": "feature-wall",      "tierName": "Standard", "ratePerUnit": 200,  "materialSpec": "Fluted MDF panels with paint/laminate finish + LED backdrop" },
+  { "id": "feature-wall-prem",      "productId": "feature-wall",      "tierName": "Premium",  "ratePerUnit": 320,  "materialSpec": "Solid wood slat / stone cladding / fabric panel with integrated lighting" },
+  { "id": "feature-wall-lux",       "productId": "feature-wall",      "tierName": "Luxury",   "ratePerUnit": 500,  "materialSpec": "Marble slab / bespoke 3D panel / lacquered glass with smart lighting" },
+
+  { "id": "bed-platform-eco",       "productId": "bed-platform",      "tierName": "Economy",  "ratePerUnit": 18000, "materialSpec": "HDF board bed, fabric headboard, standard hardware, basic storage" },
+  { "id": "bed-platform-std",       "productId": "bed-platform",      "tierName": "Standard", "ratePerUnit": 28000, "materialSpec": "MDF bed with hydraulic storage, upholstered headboard, side tables" },
+  { "id": "bed-platform-prem",      "productId": "bed-platform",      "tierName": "Premium",  "ratePerUnit": 42000, "materialSpec": "BWP ply, custom upholstered headboard with LED, hydraulic storage, bedside units" },
+  { "id": "bed-platform-lux",       "productId": "bed-platform",      "tierName": "Luxury",   "ratePerUnit": 65000, "materialSpec": "Solid wood frame, bespoke fabric/leather headboard, Italian hardware, smart LED" },
+
+  { "id": "study-unit-eco",         "productId": "study-unit",        "tierName": "Economy",  "ratePerUnit": 3500,  "materialSpec": "HDF board, laminate, standard hardware, basic bookshelf" },
+  { "id": "study-unit-std",         "productId": "study-unit",        "tierName": "Standard", "ratePerUnit": 5500,  "materialSpec": "MDF board, imported laminate, overhead cabinets, cable management" },
+  { "id": "study-unit-prem",        "productId": "study-unit",        "tierName": "Premium",  "ratePerUnit": 8000,  "materialSpec": "BWP ply, acrylic finish, Hettich channels, integrated LED task lighting" },
+  { "id": "study-unit-lux",         "productId": "study-unit",        "tierName": "Luxury",   "ratePerUnit": 12000, "materialSpec": "Marine ply, lacquered glass, Blum hardware, wireless charging, smart lighting" },
+
+  { "id": "vanity-bathroom-eco",    "productId": "vanity-bathroom",   "tierName": "Economy",  "ratePerUnit": 4500,  "materialSpec": "PVC board vanity, basic mirror, SS fittings" },
+  { "id": "vanity-bathroom-std",    "productId": "vanity-bathroom",   "tierName": "Standard", "ratePerUnit": 7000,  "materialSpec": "WPC/marine ply, mirror cabinet with LED, ceramic under-mount basin" },
+  { "id": "vanity-bathroom-prem",   "productId": "vanity-bathroom",   "tierName": "Premium",  "ratePerUnit": 10500, "materialSpec": "Marine ply, quartz top, back-lit mirror, concealed storage, branded tapware" },
+  { "id": "vanity-bathroom-lux",    "productId": "vanity-bathroom",   "tierName": "Luxury",   "ratePerUnit": 16000, "materialSpec": "Solid surface / Corian vanity, smart mirror, vessel basin, Grohe/Kohler tapware" },
+
+  { "id": "flooring-tile-eco",      "productId": "flooring-tile",     "tierName": "Economy",  "ratePerUnit": 55,   "materialSpec": "Ceramic tiles 600×600mm, standard adhesive & grout" },
+  { "id": "flooring-tile-std",      "productId": "flooring-tile",     "tierName": "Standard", "ratePerUnit": 90,   "materialSpec": "Vitrified tiles 800×800mm, white cement, levelling compound" },
+  { "id": "flooring-tile-prem",     "productId": "flooring-tile",     "tierName": "Premium",  "ratePerUnit": 140,  "materialSpec": "Large format porcelain 1200×600mm, epoxy grout, precision levelling" },
+  { "id": "flooring-tile-lux",      "productId": "flooring-tile",     "tierName": "Luxury",   "ratePerUnit": 250,  "materialSpec": "Italian marble / natural stone 1200×1200mm, white cement + epoxy grout, border inlay" },
+
+  { "id": "flooring-laminate-eco",  "productId": "flooring-laminate", "tierName": "Economy",  "ratePerUnit": 60,   "materialSpec": "8mm AC3 laminate, standard foam underlay, click-lock system" },
+  { "id": "flooring-laminate-std",  "productId": "flooring-laminate", "tierName": "Standard", "ratePerUnit": 95,   "materialSpec": "10mm AC4 laminate, IXPE underlay with moisture barrier" },
+  { "id": "flooring-laminate-prem", "productId": "flooring-laminate", "tierName": "Premium",  "ratePerUnit": 145,  "materialSpec": "12mm AC5 laminate with attached underlay, deep emboss texture" },
+  { "id": "flooring-laminate-lux",  "productId": "flooring-laminate", "tierName": "Luxury",   "ratePerUnit": 220,  "materialSpec": "Engineered hardwood 15mm, natural wood veneer, floating or nail-down install" }
+]

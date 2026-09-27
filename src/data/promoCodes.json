@@ -1,0 +1,34 @@
+[
+  {
+    "code": "WELCOME10",
+    "description": "10% off on your first order",
+    "discountType": "percent",
+    "discountValue": 10,
+    "minOrderValue": 50000,
+    "active": true
+  },
+  {
+    "code": "FLAT5K",
+    "description": "Flat ₹5,000 off on orders above ₹1,00,000",
+    "discountType": "flat",
+    "discountValue": 5000,
+    "minOrderValue": 100000,
+    "active": true
+  },
+  {
+    "code": "PREMIUM15",
+    "description": "15% off — for Premium & Luxury tiers",
+    "discountType": "percent",
+    "discountValue": 15,
+    "minOrderValue": 150000,
+    "active": true
+  },
+  {
+    "code": "DEMO",
+    "description": "Demo code — 5% off, no minimum",
+    "discountType": "percent",
+    "discountValue": 5,
+    "minOrderValue": 0,
+    "active": true
+  }
+]

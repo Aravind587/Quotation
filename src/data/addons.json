@@ -1,0 +1,82 @@
+[
+  {
+    "id": "addon-softclose-hinges",
+    "name": "Soft-close Hinges Upgrade",
+    "description": "Upgrade all door hinges to premium soft-close mechanism",
+    "priceType": "flat",
+    "price": 1200,
+    "applicableCategories": ["kitchen", "wardrobe", "bedroom"]
+  },
+  {
+    "id": "addon-interior-led",
+    "name": "Interior LED Lighting",
+    "description": "Motion-sensor LED lighting inside cabinets/wardrobe",
+    "priceType": "flat",
+    "price": 2500,
+    "applicableCategories": ["kitchen", "wardrobe", "living", "bedroom"]
+  },
+  {
+    "id": "addon-glass-shutters",
+    "name": "Glass Shutter Panels",
+    "description": "Replace solid shutters with frosted/tinted glass panel shutters",
+    "priceType": "flat",
+    "price": 3500,
+    "applicableCategories": ["kitchen", "living"]
+  },
+  {
+    "id": "addon-pullout-drawer",
+    "name": "Pull-out Drawer Set (3 drawers)",
+    "description": "Set of 3 soft-close pull-out drawers with full-extension channels",
+    "priceType": "flat",
+    "price": 4800,
+    "applicableCategories": ["kitchen", "wardrobe", "bedroom"]
+  },
+  {
+    "id": "addon-mirror-panel",
+    "name": "Mirror Panel",
+    "description": "Full-length or shutter-panel integrated mirror",
+    "priceType": "flat",
+    "price": 2200,
+    "applicableCategories": ["wardrobe", "bedroom", "bathroom"]
+  },
+  {
+    "id": "addon-countertop-upgrade",
+    "name": "Countertop Upgrade to Quartz",
+    "description": "Upgrade from granite to premium engineered quartz countertop",
+    "priceType": "flat",
+    "price": 8500,
+    "applicableCategories": ["kitchen"]
+  },
+  {
+    "id": "addon-backsplash",
+    "name": "Designer Backsplash",
+    "description": "Mosaic tile, glass or stone backsplash installation",
+    "priceType": "flat",
+    "price": 3000,
+    "applicableCategories": ["kitchen", "bathroom"]
+  },
+  {
+    "id": "addon-smart-lighting",
+    "name": "Smart LED Strip (RGB+CCT)",
+    "description": "App-controlled smart LED cove/accent lighting",
+    "priceType": "flat",
+    "price": 5500,
+    "applicableCategories": ["living", "bedroom", "kitchen"]
+  },
+  {
+    "id": "addon-wallpaper",
+    "name": "Designer Wallpaper (per room)",
+    "description": "Premium imported wallpaper installation for one wall/room",
+    "priceType": "flat",
+    "price": 6000,
+    "applicableCategories": ["living", "bedroom"]
+  },
+  {
+    "id": "addon-epoxy-flooring",
+    "name": "Epoxy Grout Upgrade",
+    "description": "Upgrade standard grout to epoxy grout for better durability & aesthetics",
+    "priceType": "flat",
+    "price": 2000,
+    "applicableCategories": ["flooring", "bathroom"]
+  }
+]

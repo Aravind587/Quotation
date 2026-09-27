@@ -1,0 +1,50 @@
+[
+  {
+    "id": "kitchen",
+    "name": "Modular Kitchen",
+    "description": "Custom modular kitchen units with premium finishes",
+    "icon": "ChefHat",
+    "image": "/images/categories/kitchen.jpg",
+    "gradient": "from-orange-400 to-red-500"
+  },
+  {
+    "id": "wardrobe",
+    "name": "Wardrobes & Storage",
+    "description": "Sliding & hinged wardrobes with modular interiors",
+    "icon": "Package",
+    "image": "/images/categories/wardrobe.jpg",
+    "gradient": "from-purple-400 to-indigo-500"
+  },
+  {
+    "id": "living",
+    "name": "Living Room",
+    "description": "TV units, feature walls, false ceilings & more",
+    "icon": "Sofa",
+    "image": "/images/categories/living.jpg",
+    "gradient": "from-teal-400 to-cyan-500"
+  },
+  {
+    "id": "bedroom",
+    "name": "Bedroom",
+    "description": "Beds, study units, and bedroom furniture",
+    "icon": "Bed",
+    "image": "/images/categories/bedroom.jpg",
+    "gradient": "from-pink-400 to-rose-500"
+  },
+  {
+    "id": "bathroom",
+    "name": "Bathroom",
+    "description": "Vanity units, mirrors, and bathroom accessories",
+    "icon": "Droplets",
+    "image": "/images/categories/bathroom.jpg",
+    "gradient": "from-blue-400 to-sky-500"
+  },
+  {
+    "id": "flooring",
+    "name": "Flooring",
+    "description": "Tiles, hardwood, laminate and vinyl flooring",
+    "icon": "Grid",
+    "image": "/images/categories/flooring.jpg",
+    "gradient": "from-amber-400 to-yellow-500"
+  }
+]
