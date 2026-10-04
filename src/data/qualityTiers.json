@@ -69,3 +69,24 @@
   { "id": "flooring-laminate-prem", "productId": "flooring-laminate", "tierName": "Premium",  "ratePerUnit": 145,  "materialSpec": "12mm AC5 laminate with attached underlay, deep emboss texture" },
   { "id": "flooring-laminate-lux",  "productId": "flooring-laminate", "tierName": "Luxury",   "ratePerUnit": 220,  "materialSpec": "Engineered hardwood 15mm, natural wood veneer, floating or nail-down install" }
 ]
+
+  ,{ "id": "fc-led-eco",     "productId": "fc-led-strip",   "tierName": "Economy",  "ratePerUnit": 35,  "materialSpec": "Basic 5-metre SMD2835 LED strip, single colour, no dimmer" },
+  { "id": "fc-led-std",     "productId": "fc-led-strip",   "tierName": "Standard", "ratePerUnit": 65,  "materialSpec": "Double-density SMD5050 LED strip, warm white + neutral, aluminium channel" },
+  { "id": "fc-led-prem",    "productId": "fc-led-strip",   "tierName": "Premium",  "ratePerUnit": 110, "materialSpec": "COB LED strip, CCT tunable 2700K–6500K, aluminium profile with diffuser, dimmer" },
+  { "id": "fc-led-lux",     "productId": "fc-led-strip",   "tierName": "Luxury",   "ratePerUnit": 180, "materialSpec": "Smart RGB+CCT COB strip, app control, aluminium recessed profile, scene presets" },
+
+  { "id": "fc-cove-eco",    "productId": "fc-cove-profile","tierName": "Economy",  "ratePerUnit": 30,  "materialSpec": "Basic PVC shadow gap profile, white paint finish" },
+  { "id": "fc-cove-std",    "productId": "fc-cove-profile","tierName": "Standard", "ratePerUnit": 55,  "materialSpec": "Anodised aluminium cove profile 50×30mm with LED slot" },
+  { "id": "fc-cove-prem",   "productId": "fc-cove-profile","tierName": "Premium",  "ratePerUnit": 90,  "materialSpec": "Deep aluminium cove 80×50mm, hidden LED channel, diffuser strip" },
+  { "id": "fc-cove-lux",    "productId": "fc-cove-profile","tierName": "Luxury",   "ratePerUnit": 140, "materialSpec": "Custom powder-coated aluminium profile, integrated LED + diffuser, corner-mitred joints" },
+
+  { "id": "fc-spot-eco",    "productId": "fc-spot-light",  "tierName": "Economy",  "ratePerUnit": 250,  "materialSpec": "Basic LED downlight 7W, fixed, white trim" },
+  { "id": "fc-spot-std",    "productId": "fc-spot-light",  "tierName": "Standard", "ratePerUnit": 450,  "materialSpec": "Recessed COB downlight 10W, adjustable, brushed nickel" },
+  { "id": "fc-spot-prem",   "productId": "fc-spot-light",  "tierName": "Premium",  "ratePerUnit": 750,  "materialSpec": "Adjustable COB 12W, anti-glare, dimmable driver, black/gold finish" },
+  { "id": "fc-spot-lux",    "productId": "fc-spot-light",  "tierName": "Luxury",   "ratePerUnit": 1200, "materialSpec": "Architectural downlight 15W DALI dimmable, flush trim, smart control" },
+
+  { "id": "fc-fan-eco",     "productId": "fc-fan-point",   "tierName": "Economy",  "ratePerUnit": 350,  "materialSpec": "Fan hook + PVC conduit provision, standard box" },
+  { "id": "fc-fan-std",     "productId": "fc-fan-point",   "tierName": "Standard", "ratePerUnit": 550,  "materialSpec": "Fan hook + concealed copper wiring, modular plate" },
+  { "id": "fc-fan-prem",    "productId": "fc-fan-point",   "tierName": "Premium",  "ratePerUnit": 850,  "materialSpec": "Fan/AC provision with dedicated MCB, copper 2.5sq.mm wiring, concealed trunking" },
+  { "id": "fc-fan-lux",     "productId": "fc-fan-point",   "tierName": "Luxury",   "ratePerUnit": 1200, "materialSpec": "Smart fan/AC point with Zigbee switch, dedicated circuit, premium modular plate" }
+]

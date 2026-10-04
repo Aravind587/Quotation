@@ -1,209 +1,268 @@
 /**
- * xlsxExport.js
- * Generates a fully formatted Excel (.xlsx) quotation using SheetJS.
- * The sheet mimics an A4 printed quotation with merged cells, borders,
- * company header, customer block, itemised table, and totals.
- */
-
-import { formatCurrency } from './pricing';
-
-/**
- * Download an Excel quotation.
+ * xlsxExport.js  –  Full multi-column Excel quotation
  *
- * @param {Object} params
- * @param {Array}  params.lineItems       - computed line items from calcQuotation
- * @param {Object} params.totals          - calcQuotation result
- * @param {Object} params.customer        - customer details object
- * @param {string} params.quotationNumber
- * @param {string} params.quotationDate   - ISO string
- * @param {Object} params.settings        - settings.json
+ * Columns (A–N):
+ *  A  Sl No     B  Room       C  Product Name      D  Tier/Quality
+ *  E  Material Specification  F  L (ft)  G  B (ft)  H  Qty / Area
+ *  I  Unit      J  Rate/Unit  K  Add-ons            L  Line Total
+ *  M  GST %     N  GST Amt    O  Net Amount (incl GST)
  */
+import categoriesData from '../data/categories.json';
+import addonsData     from '../data/addons.json';
+
+const COLS = 15;   // A–O
+
+function fmt(n, sym = '₹') {
+  return `${sym}${Math.round(n).toLocaleString('en-IN')}`;
+}
+
+function groupByRoom(lineItems) {
+  const map = new Map();
+  lineItems.forEach(item => {
+    const key = item.roomLabel?.trim() ||
+      categoriesData.find(c => c.id === item.product?.categoryId)?.name ||
+      'General';
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(item);
+  });
+  return map;
+}
+
+function unitStr(p) {
+  return { per_sqft:'sq ft', per_rft:'rft', per_unit:'nos' }[p?.unitType] || '';
+}
+
+function getAddonNames(item) {
+  if (!item.selectedAddonIds?.length) return '—';
+  return item.selectedAddonIds
+    .map(id => addonsData.find(a => a.id === id)?.name)
+    .filter(Boolean)
+    .join(', ');
+}
+function getAddonTotal(item) {
+  if (!item.selectedAddonIds?.length) return 0;
+  return item.selectedAddonIds.reduce((s, id) => {
+    const a = addonsData.find(x => x.id === id);
+    return s + (a?.price || 0);
+  }, 0);
+}
+
 export async function downloadXLSX({
-  lineItems,
-  totals,
-  customer,
-  quotationNumber,
-  quotationDate,
-  settings,
+  lineItems, totals, customer, quotationNumber,
+  quotationDate, settings, projectName,
 }) {
   const XLSX = await import('xlsx');
-  const wb = XLSX.utils.book_new();
+  const sym  = settings.currencySymbol || '₹';
+  const gst  = settings.gstPercent || 18;
 
-  const sym = settings.currencySymbol || '₹';
   const dateStr = new Date(quotationDate).toLocaleDateString('en-IN', {
-    day: 'numeric', month: 'long', year: 'numeric',
+    day:'numeric', month:'long', year:'numeric',
   });
-  const validUntil = new Date(
+  const validStr = new Date(
     new Date(quotationDate).getTime() + settings.quotationValidityDays * 86400000
-  ).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  ).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
 
-  /* ── Build rows ─────────────────────────────────────────────────────── */
-  const rows = [];
+  const blank = Array(COLS).fill('');
+  const rows  = [];
 
-  // Row 0 – Company name (large header)
-  rows.push([settings.companyName, '', '', '', '', '', '']);
-  // Row 1 – Tagline
-  rows.push([settings.companyTagline, '', '', '', '', '', '']);
-  // Row 2 – Address
-  rows.push([settings.companyAddress, '', '', '', 'QUOTATION', '', '']);
-  // Row 3 – Contact
-  rows.push([`${settings.companyPhone}   |   ${settings.companyEmail}`, '', '', '', quotationNumber, '', '']);
-  // Row 4 – GSTIN
-  rows.push([`GSTIN: ${settings.companyGST}`, '', '', '', `Date: ${dateStr}`, '', '']);
-  // Row 5 – blank
-  rows.push(['', '', '', '', `Valid until: ${validUntil}`, '', '']);
-  // Row 6 – blank separator
-  rows.push(['', '', '', '', '', '', '']);
+  /* ── Header block ── */
+  rows.push([settings.companyName,       ...Array(COLS-1).fill('')]);
+  rows.push([settings.companyTagline,    ...Array(COLS-1).fill('')]);
+  rows.push([settings.companyAddress,    ...Array(COLS-1).fill('')]);
+  rows.push([`${settings.companyPhone}  |  ${settings.companyEmail}`, ...Array(COLS-1).fill('')]);
+  rows.push([`GSTIN: ${settings.companyGST}`, ...Array(COLS-1).fill('')]);
+  rows.push([...blank]);
 
-  // Row 7 – Customer block header
-  rows.push(['BILL TO', '', '', '', '', '', '']);
-  rows.push([`Name: ${customer.name || '—'}`, '', '', '', `Project: ${customer.projectName || '—'}`, '', '']);
-  rows.push([`Phone: ${customer.phone || '—'}`, '', '', '', `City: ${customer.city || '—'}`, '', '']);
-  rows.push([`Email: ${customer.email || '—'}`, '', '', '', '', '', '']);
-  rows.push([`Address: ${customer.address || '—'}`, '', '', '', '', '', '']);
-  // Row 12 – blank
-  rows.push(['', '', '', '', '', '', '']);
+  /* ── Quotation meta row ── */
+  rows.push([`QUOTATION: ${quotationNumber}`, '', '', '', '', '', '', `Date: ${dateStr}`, '', '', '', '', '', '', `Valid: ${validStr}`]);
+  rows.push([`Project: ${projectName || customer.projectName || ''}`, ...Array(COLS-1).fill('')]);
+  rows.push([...blank]);
 
-  // Row 13 – Table header
-  const headerRow = ['#', 'Description', 'Room / Label', 'Tier', 'Qty / Area', `Rate (${sym})`, `Amount (${sym})`];
-  rows.push(headerRow);
-  const tableHeaderRowIdx = rows.length - 1; // 0-indexed = 13
+  /* ── Customer block ── */
+  rows.push(['BILL TO', ...Array(COLS-1).fill('')]);
+  rows.push([`Name    : ${customer.name || '—'}`,    ...Array(COLS-1).fill('')]);
+  rows.push([`Phone   : ${customer.phone || '—'}`,   ...Array(COLS-1).fill('')]);
+  rows.push([`Email   : ${customer.email || '—'}`,   ...Array(COLS-1).fill('')]);
+  rows.push([`Address : ${customer.address || '—'}, ${customer.city || ''}`, ...Array(COLS-1).fill('')]);
+  rows.push([...blank]);
 
-  // Data rows
-  lineItems.forEach((item, i) => {
-    const unitLabel = { per_sqft: 'sq ft', per_rft: 'rft', per_unit: 'unit' }[item.product?.unitType] || '';
-    const qtyStr = `${item.qty.toFixed(1)} ${unitLabel}`;
-    rows.push([
-      i + 1,
-      item.product?.name || '',
-      item.roomLabel || '',
-      item.tier?.tierName || '',
-      qtyStr,
-      item.unitRate,
-      item.lineTotal,
-    ]);
+  /* ── Column header row ── */
+  const HDR_ROW = rows.length;
+  rows.push([
+    'Sl No', 'Room', 'Product / Description', 'Quality Tier',
+    'Material Specification',
+    'L (ft)', 'B (ft)', 'Qty / Area', 'Unit',
+    `Rate / Unit (${sym})`,
+    `Add-ons (${sym})`,
+    `Line Total (${sym})`,
+    `GST %`,
+    `GST Amt (${sym})`,
+    `Net Amt incl GST (${sym})`,
+  ]);
 
-    // Material spec sub-row
-    if (item.tier?.materialSpec) {
-      rows.push(['', `  Spec: ${item.tier.materialSpec}`, '', '', '', '', '']);
-    }
+  /* ── Data rows ── */
+  const grouped = groupByRoom(lineItems);
+  let slNo = 1;
 
-    // Add-ons sub-row
-    if (item.selectedAddons?.length > 0) {
-      const addonNames = item.selectedAddons.map((a) => a.name).join(', ');
-      rows.push(['', `  Add-ons: ${addonNames}`, '', '', '', `+${sym}${item.addonTotal.toLocaleString('en-IN')}`, '']);
-    }
-  });
+  grouped.forEach((roomItems, roomName) => {
+    /* room section header */
+    rows.push([`▸  ${roomName}`, ...Array(COLS-1).fill('')]);
 
-  const lastItemRowIdx = rows.length - 1;
+    let roomSubtotal = 0;
 
-  // Blank row before totals
-  rows.push(['', '', '', '', '', '', '']);
+    roomItems.forEach(item => {
+      const addonAmt = getAddonTotal(item);
+      const lineAmt  = item.lineTotal + addonAmt;
+      const gstAmt   = (lineAmt * gst) / 100;
+      const netAmt   = lineAmt + gstAmt;
+      roomSubtotal  += lineAmt;
 
-  // Totals block
-  rows.push(['', '', '', '', '', 'Subtotal', totals.subtotal]);
-  if (totals.discountAmount > 0) {
-    rows.push(['', '', '', '', '', 'Discount', -totals.discountAmount]);
-  }
-  rows.push(['', '', '', '', '', 'Taxable Amount', totals.taxableAmount]);
-  rows.push(['', '', '', '', '', `CGST (${totals.gstPercent / 2}%)`, totals.taxAmount / 2]);
-  rows.push(['', '', '', '', '', `SGST (${totals.gstPercent / 2}%)`, totals.taxAmount / 2]);
-  if (totals.installationCharge > 0) {
-    rows.push(['', '', '', '', '', 'Installation Charge', totals.installationCharge]);
-  }
-  if (totals.transportCharge > 0) {
-    rows.push(['', '', '', '', '', 'Transport Charge', totals.transportCharge]);
-  }
-  rows.push(['', '', '', '', '', 'GRAND TOTAL', totals.grandTotal]);
+      const L = item.product?.unitType === 'per_sqft' ? item.dimensions?.length || 0
+              : item.product?.unitType === 'per_rft'  ? item.dimensions?.length || 0
+              : '';
+      const B = item.product?.unitType === 'per_sqft' ? item.dimensions?.width  || 0 : '';
+      const qtyArea = item.qty?.toFixed?.(1) || item.quantity || 1;
 
-  const grandTotalRowIdx = rows.length - 1;
+      rows.push([
+        slNo++,
+        roomName,
+        item.product?.name || '',
+        item.tier?.tierName || '',
+        item.tier?.materialSpec || '',
+        L,
+        B,
+        qtyArea,
+        unitStr(item.product),
+        item.unitRate || 0,
+        addonAmt > 0 ? addonAmt : 0,
+        lineAmt,
+        gst,
+        gstAmt,
+        netAmt,
+      ]);
 
-  // Blank
-  rows.push(['', '', '', '', '', '', '']);
-
-  // Terms header
-  rows.push(['TERMS & CONDITIONS', '', '', '', '', '', '']);
-  settings.termsAndConditions.forEach((term, i) => {
-    rows.push([`${i + 1}. ${term}`, '', '', '', '', '', '']);
-  });
-
-  rows.push(['', '', '', '', '', '', '']);
-  rows.push(['This is a computer-generated quotation.', '', '', '', '', '', '']);
-  rows.push([`Thank you for choosing ${settings.companyName}`, '', '', '', '', '', '']);
-
-  /* ── Create worksheet ───────────────────────────────────────────────── */
-  const ws = XLSX.utils.aoa_to_sheet(rows);
-
-  /* ── Column widths ──────────────────────────────────────────────────── */
-  ws['!cols'] = [
-    { wch: 5 },   // #
-    { wch: 40 },  // Description
-    { wch: 18 },  // Room
-    { wch: 12 },  // Tier
-    { wch: 14 },  // Qty
-    { wch: 18 },  // Rate / label
-    { wch: 18 },  // Amount
-  ];
-
-  /* ── Row heights ────────────────────────────────────────────────────── */
-  ws['!rows'] = rows.map((_, i) => {
-    if (i === 0) return { hpt: 28 }; // company name
-    if (i === tableHeaderRowIdx) return { hpt: 20 };
-    return { hpt: 16 };
-  });
-
-  /* ── Merges ─────────────────────────────────────────────────────────── */
-  ws['!merges'] = [
-    // Company name across all cols
-    { s: { r: 0, c: 0 }, e: { r: 0, c: 3 } },
-    { s: { r: 1, c: 0 }, e: { r: 1, c: 3 } },
-    { s: { r: 2, c: 0 }, e: { r: 2, c: 3 } },
-    { s: { r: 3, c: 0 }, e: { r: 3, c: 3 } },
-    { s: { r: 4, c: 0 }, e: { r: 4, c: 3 } },
-    { s: { r: 5, c: 0 }, e: { r: 5, c: 3 } },
-    // Customer block label/value
-    { s: { r: 8, c: 0 }, e: { r: 8, c: 2 } },
-    { s: { r: 9, c: 0 }, e: { r: 9, c: 2 } },
-    { s: { r: 10, c: 0 }, e: { r: 10, c: 2 } },
-    { s: { r: 11, c: 0 }, e: { r: 11, c: 4 } },
-    // Terms rows merge across all cols
-    ...rows.slice(grandTotalRowIdx + 2).map((_, i) => ({
-      s: { r: grandTotalRowIdx + 2 + i, c: 0 },
-      e: { r: grandTotalRowIdx + 2 + i, c: 6 },
-    })),
-  ];
-
-  /* ── Cell styles (requires xlsx-style or @sheet/write – use basic format codes) */
-  // Mark currency cells
-  const currencyCols = [5, 6];
-  rows.forEach((row, r) => {
-    currencyCols.forEach((c) => {
-      const addr = XLSX.utils.encode_cell({ r, c });
-      if (ws[addr] && typeof ws[addr].v === 'number') {
-        ws[addr].t = 'n';
-        ws[addr].z = `"${sym}"#,##0`;
+      /* notes sub-row */
+      if (item.notes) {
+        rows.push(['', '', `  Notes: ${item.notes}`, ...Array(COLS-3).fill('')]);
+      }
+      /* addon names sub-row */
+      if (item.selectedAddonIds?.length) {
+        rows.push(['', '', `  Add-ons: ${getAddonNames(item)}`, ...Array(COLS-3).fill('')]);
       }
     });
+
+    /* room subtotal */
+    const roomGST = (roomSubtotal * gst) / 100;
+    rows.push([
+      '', `${roomName} — Subtotal`, ...Array(COLS-14).fill(''),
+      '', '', '', '', '', '', '',
+      roomSubtotal, gst, roomGST, roomSubtotal + roomGST,
+    ]);
+    rows.push([...blank]);
   });
 
-  /* ── Page setup for A4 print ─────────────────────────────────────────── */
-  ws['!pageSetup'] = {
-    paperSize: 9,        // A4
-    orientation: 'portrait',
-    fitToPage: true,
-    fitToWidth: 1,
-    fitToHeight: 0,
-    scale: 85,
-  };
+  /* ── Grand totals block ── */
+  const TOTALS_START = rows.length;
+  const sub        = totals.subtotal;
+  const disc       = totals.discountAmount || 0;
+  const taxable    = sub - disc;
+  const gstTotal   = totals.taxAmount;
+  const install    = totals.installationCharge || 0;
+  const transport  = totals.transportCharge    || 0;
+  const grand      = taxable + gstTotal + install + transport;
 
-  ws['!printSetup'] = {
-    paperSize: 9,
-    orientation: 'portrait',
-  };
+  rows.push([...blank.slice(0,-4), '', 'Subtotal',           '', sub,    gst, sub*gst/100,   sub*(1+gst/100)].slice(-COLS).concat(Array(Math.max(0,COLS-15)).fill('')));
+  // rebuild properly
+  const totalRows = [
+    ['','','','','','','','','','','Subtotal',           sub,    '',   '',           sub             ],
+    ...(disc>0 ? [['','','','','','','','','','','Discount',          -disc,   '',  '',           -disc           ]] : []),
+    ['','','','','','','','','','','Taxable Amount',     taxable,'',   '',           taxable         ],
+    ['','','','','','','','','','',`CGST (${gst/2}%)`,  '',     gst/2,taxable*gst/2/100, taxable*gst/2/100],
+    ['','','','','','','','','','',`SGST (${gst/2}%)`,  '',     gst/2,taxable*gst/2/100, taxable*gst/2/100],
+    ...(install>0  ? [['','','','','','','','','','','Installation',      install, '',  '',           install         ]] : []),
+    ...(transport>0? [['','','','','','','','','','','Transport',          transport,'', '',          transport       ]] : []),
+    ['','','','','','','','','','','GRAND TOTAL',        grand,  '',   '',           grand           ],
+  ];
+  // pop the wrong row we pushed above
+  rows.pop();
+  totalRows.forEach(r => rows.push(r));
 
-  /* ── Add to workbook and save ────────────────────────────────────────── */
+  /* ── Terms ── */
+  rows.push([...blank]);
+  const TERMS_START = rows.length;
+  rows.push(['TERMS & CONDITIONS', ...Array(COLS-1).fill('')]);
+  settings.termsAndConditions.forEach((t, i) => {
+    rows.push([`${i+1}.  ${t}`, ...Array(COLS-1).fill('')]);
+  });
+  rows.push([...blank]);
+  rows.push([
+    `Computer-generated quotation  ·  ${settings.companyName}  ·  ${settings.companyPhone}`,
+    ...Array(COLS-1).fill(''),
+  ]);
+
+  /* ── Create worksheet ── */
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+
+  /* ── Column widths ── */
+  ws['!cols'] = [
+    { wch:5  }, // A  Sl
+    { wch:16 }, // B  Room
+    { wch:36 }, // C  Product
+    { wch:11 }, // D  Tier
+    { wch:42 }, // E  Spec
+    { wch:7  }, // F  L
+    { wch:7  }, // G  B
+    { wch:10 }, // H  Qty
+    { wch:6  }, // I  Unit
+    { wch:14 }, // J  Rate
+    { wch:14 }, // K  Add-ons
+    { wch:15 }, // L  Line Total
+    { wch:6  }, // M  GST%
+    { wch:14 }, // N  GST Amt
+    { wch:16 }, // O  Net Amt
+  ];
+
+  /* ── Number formats ── */
+  const currFmt = `"${sym}"#,##0`;
+  const pctFmt  = '0"%"';
+  for (let r = 0; r < rows.length; r++) {
+    // currency cols: J(9), K(10), L(11), N(13), O(14)
+    [9,10,11,13,14].forEach(c => {
+      const addr = XLSX.utils.encode_cell({ r, c });
+      if (ws[addr] && typeof ws[addr].v === 'number') {
+        ws[addr].t = 'n'; ws[addr].z = currFmt;
+      }
+    });
+    // pct col M(12)
+    const mAddr = XLSX.utils.encode_cell({ r, c: 12 });
+    if (ws[mAddr] && typeof ws[mAddr].v === 'number') {
+      ws[mAddr].t = 'n'; ws[mAddr].z = pctFmt;
+    }
+  }
+
+  /* ── Row heights ── */
+  ws['!rows'] = rows.map((_, i) => {
+    if (i === 0)        return { hpt: 22 };
+    if (i === HDR_ROW)  return { hpt: 18 };
+    return { hpt: 15 };
+  });
+
+  /* ── Merges (header block + terms) ── */
+  const merges = [
+    ...Array.from({ length: 14 }, (_, i) => ({
+      s: { r: i, c: 0 }, e: { r: i, c: 10 },
+    })),
+    ...rows.slice(TERMS_START).map((_, i) => ({
+      s: { r: TERMS_START+i, c: 0 }, e: { r: TERMS_START+i, c: COLS-1 },
+    })),
+  ];
+  ws['!merges'] = merges;
+
+  /* ── Page setup ── */
+  ws['!pageSetup'] = { paperSize:9, orientation:'landscape', fitToPage:true, fitToWidth:1, fitToHeight:0 };
+
+  /* ── Save ── */
+  const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Quotation');
-
-  const filename = `${settings.companyName.replace(/\s+/g, '-')}-Quote-${quotationNumber}.xlsx`;
-  XLSX.writeFile(wb, filename);
+  XLSX.writeFile(wb, `${settings.companyName.replace(/\s+/g,'-')}-${quotationNumber}.xlsx`);
 }
