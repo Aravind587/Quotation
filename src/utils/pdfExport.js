@@ -1,98 +1,81 @@
 /**
- * pdfExport.js — Client-side PDF generation using jsPDF + html2canvas.
- * Captures the #quotation-printable element and exports it as a PDF.
+ * pdfExport.js
+ * Client-side PDF generation: captures a DOM element via html2canvas
+ * then tiles it across A4 jsPDF pages.
  */
 
 /**
- * Generate and download a PDF of the quotation.
- * @param {string} elementId   DOM id of the printable element
- * @param {string} filename    Output filename (without .pdf)
+ * Download a PDF of the element with the given DOM id.
+ * @param {string} elementId  - id of the element to capture
+ * @param {string} filename   - output file name without extension
  */
-export async function downloadQuotationPDF(elementId = 'quotation-printable', filename = 'quotation') {
-  // Dynamically import to keep initial bundle small
+export async function downloadPDF(elementId = 'quotation-print-area', filename = 'quotation') {
   const [{ default: jsPDF }, { default: html2canvas }] = await Promise.all([
     import('jspdf'),
     import('html2canvas'),
   ]);
 
-  const element = document.getElementById(elementId);
-  if (!element) {
-    console.error(`Element #${elementId} not found`);
-    return;
-  }
+  const el = document.getElementById(elementId);
+  if (!el) throw new Error(`Element #${elementId} not found`);
 
-  // Temporarily expand element for full capture
-  const originalOverflow = element.style.overflow;
-  const originalMaxH = element.style.maxHeight;
-  element.style.overflow = 'visible';
-  element.style.maxHeight = 'none';
+  /* Temporarily remove overflow clipping so the full element is captured */
+  const prevOverflow  = el.style.overflow;
+  const prevMaxHeight = el.style.maxHeight;
+  el.style.overflow  = 'visible';
+  el.style.maxHeight = 'none';
 
+  let canvas;
   try {
-    const canvas = await html2canvas(element, {
-      scale: 2,           // 2x for crisp text
+    canvas = await html2canvas(el, {
+      scale: 2,
       useCORS: true,
       logging: false,
-      backgroundColor: '#ffffff',
+      backgroundColor: '#f3f4f6',   // stone-100 background
     });
+  } finally {
+    el.style.overflow  = prevOverflow;
+    el.style.maxHeight = prevMaxHeight;
+  }
 
-    element.style.overflow = originalOverflow;
-    element.style.maxHeight = originalMaxH;
+  const imgData    = canvas.toDataURL('image/png');
+  const pdf        = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const pageW      = pdf.internal.pageSize.getWidth();
+  const pageH      = pdf.internal.pageSize.getHeight();
+  const margin     = 8;  // mm
+  const contentW   = pageW - margin * 2;
 
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4',
-    });
+  /* Scale image to fit page width */
+  const imgWpx     = canvas.width;
+  const imgHpx     = canvas.height;
+  const scaledImgH = (imgHpx / imgWpx) * contentW;  // mm
 
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 10;
-    const contentWidth = pageWidth - margin * 2;
-    const imgWidth = canvas.width;
-    const imgHeight = canvas.height;
-    const ratio = contentWidth / (imgWidth / 3.7795); // px → mm at 96dpi
+  const usablePH   = pageH - margin * 2;
+  let offsetMM     = 0;
+  let page         = 0;
 
-    // If content is taller than one page, tile across multiple pages
-    const scaledImgWidth = contentWidth;
-    const scaledImgHeight = (imgHeight / imgWidth) * scaledImgWidth;
+  while (offsetMM < scaledImgH) {
+    if (page > 0) pdf.addPage();
 
-    const usablePageHeight = pageHeight - margin * 2;
-    let yPosition = 0;
-    let pageNum = 0;
+    /* Draw image shifted up so the current page slice shows */
+    pdf.addImage(imgData, 'PNG', margin, margin - offsetMM, contentW, scaledImgH);
 
-    while (yPosition < scaledImgHeight) {
-      if (pageNum > 0) pdf.addPage();
-
-      pdf.addImage(
-        imgData,
-        'PNG',
-        margin,
-        margin - yPosition,
-        scaledImgWidth,
-        scaledImgHeight
-      );
-
-      // White mask to hide content below page bottom
-      pdf.setFillColor(255, 255, 255);
-      pdf.rect(0, pageHeight - margin + 0.5, pageWidth, margin + 1, 'F');
-
-      yPosition += usablePageHeight;
-      pageNum++;
+    /* White mask below page bottom edge */
+    pdf.setFillColor(243, 244, 246);
+    pdf.rect(0, pageH - margin + 0.1, pageW, margin + 1, 'F');
+    /* White mask above page top edge (for pages after first) */
+    if (page > 0) {
+      pdf.setFillColor(243, 244, 246);
+      pdf.rect(0, 0, pageW, margin, 'F');
     }
 
-    pdf.save(`${filename}.pdf`);
-  } catch (err) {
-    element.style.overflow = originalOverflow;
-    element.style.maxHeight = originalMaxH;
-    console.error('PDF generation failed:', err);
-    throw err;
+    offsetMM += usablePH;
+    page++;
   }
+
+  pdf.save(`${filename}.pdf`);
 }
 
-/**
- * Trigger the browser's print dialog for the quotation.
- */
+/** Trigger the browser's print dialog */
 export function printQuotation() {
   window.print();
 }

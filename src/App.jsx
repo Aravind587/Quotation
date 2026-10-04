@@ -1,36 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import CartDrawer from './components/CartDrawer';
-import FloatingCartBar from './components/FloatingCartBar';
-import Home from './pages/Home';
-import CategoriesListPage from './pages/CategoriesListPage';
-import CategoryPage from './pages/CategoryPage';
-import ProductConfigPage from './pages/ProductConfigPage';
-import CartPage from './pages/CartPage';
-import QuotationPage from './pages/QuotationPage';
+import ProjectsPage from './pages/ProjectsPage';
+import BuilderPage  from './pages/BuilderPage';
+import PreviewPage  from './pages/PreviewPage';
+import SettingsPage from './pages/SettingsPage';
 
 export default function App() {
-  const [cartOpen, setCartOpen] = useState(false);
-
   return (
     <BrowserRouter>
-      <Navbar onCartOpen={() => setCartOpen(true)} />
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
-      <FloatingCartBar />
-
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/categories" element={<CategoriesListPage />} />
-          <Route path="/categories/:categoryId" element={<CategoryPage />} />
-          <Route path="/configure/:productId" element={<ProductConfigPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/quotation" element={<QuotationPage />} />
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </main>
+      <Routes>
+        <Route path="/"         element={<ProjectsPage />} />
+        <Route path="/builder"  element={<BuilderPage  />} />
+        <Route path="/preview"  element={<PreviewPage  />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/quotation" element={<Navigate to="/preview" replace />} />
+        <Route path="*"          element={<Navigate to="/"        replace />} />
+      </Routes>
     </BrowserRouter>
   );
 }
